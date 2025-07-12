@@ -52,16 +52,20 @@ body {
 
 #social-buttons {
     display: flex;
-    gap: 15px;
+    gap: 12px;
     align-items: center;
+    flex-shrink: 0;
 }
 
 #header-controls {
     margin-left: auto;
     margin-right: 20px;
     display: flex;
-    gap: 20px;
+    gap: 15px;
     align-items: center;
+    flex-wrap: nowrap;
+    overflow: hidden;
+    max-width: 60%;
 }
 
 .modern-btn {
@@ -80,6 +84,7 @@ body {
     cursor: pointer;
     transition: all 0.3s ease;
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    flex-shrink: 0;
 }
 
 .modern-btn:hover {
@@ -393,34 +398,43 @@ input[type=button]:hover {
         letter-spacing: 0.5px;
     }
     #header-controls {
-        margin-right: 10px;
-        gap: 12px;
+        margin-right: 8px;
+        gap: 8px;
+        max-width: 70%;
     }
     #social-buttons {
-        gap: 8px;
-    }
-    .social-btn {
-        width: 32px;
-        height: 32px;
-        font-size: 16px;
-        border-radius: 8px;
-    }
-    .social-btn svg {
-        width: 18px;
-        height: 18px;
-    }
-    .modern-btn {
-        padding: 6px 12px;
-        font-size: 0.8em;
-        border-radius: 8px;
         gap: 6px;
     }
-    .btn-icon {
+    .social-btn {
+        width: 28px;
+        height: 28px;
+        font-size: 14px;
+        border-radius: 6px;
+    }
+    .social-btn svg {
         width: 16px;
         height: 16px;
     }
+    .modern-btn {
+        padding: 4px 8px;
+        font-size: 0.75em;
+        border-radius: 6px;
+        gap: 4px;
+    }
+    .btn-icon {
+        width: 14px;
+        height: 14px;
+    }
     .btn-text {
-        font-size: 0.8em;
+        font-size: 0.75em;
+    }
+    #header-controls .spinner {
+        height: 20px;
+        width: 20px;
+    }
+    #header-controls #status {
+        font-size: 0.75em;
+        max-width: 80px;
     }
     .emscripten_border {
         padding: 12px 0 8px 0;
@@ -447,4 +461,26 @@ input[type=button]:hover {
         font-size: 0.95em;
         border-radius: 6px;
     }
+}
+
+/* Override spinner and status positioning when inside header */
+#header-controls .spinner {
+    height: 24px;
+    width: 24px;
+    margin: 0;
+    flex-shrink: 0;
+}
+
+#header-controls #status {
+    margin: 0;
+    font-size: 0.85em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 120px;
+    color: #ffffff;
+}
+
+#header-controls .emscripten {
+    margin: 0;
 }
