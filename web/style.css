@@ -51,11 +51,57 @@ body {
 }
 
 #social-buttons {
-    margin-left: auto;
-    margin-right: 20px;
     display: flex;
     gap: 15px;
     align-items: center;
+}
+
+#header-controls {
+    margin-left: auto;
+    margin-right: 20px;
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.modern-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    color: #ffffff;
+    font-size: 0.9em;
+    font-weight: 600;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.modern-btn:hover {
+    transform: translateY(-1px);
+    background: rgba(255, 255, 255, 0.25);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.modern-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.btn-icon {
+    width: 18px;
+    height: 18px;
+    fill: currentColor;
+}
+
+.btn-text {
+    font-size: 0.9em;
 }
 
 .social-btn {
@@ -346,8 +392,11 @@ input[type=button]:hover {
         margin-left: 8px;
         letter-spacing: 0.5px;
     }
-    #social-buttons {
+    #header-controls {
         margin-right: 10px;
+        gap: 12px;
+    }
+    #social-buttons {
         gap: 8px;
     }
     .social-btn {
@@ -359,6 +408,19 @@ input[type=button]:hover {
     .social-btn svg {
         width: 18px;
         height: 18px;
+    }
+    .modern-btn {
+        padding: 6px 12px;
+        font-size: 0.8em;
+        border-radius: 8px;
+        gap: 6px;
+    }
+    .btn-icon {
+        width: 16px;
+        height: 16px;
+    }
+    .btn-text {
+        font-size: 0.8em;
     }
     .emscripten_border {
         padding: 12px 0 8px 0;
