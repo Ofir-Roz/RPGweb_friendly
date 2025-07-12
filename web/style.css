@@ -50,6 +50,53 @@ body {
     -webkit-text-fill-color: transparent;
 }
 
+#social-buttons {
+    margin-left: auto;
+    margin-right: 20px;
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.social-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: #ffffff;
+    font-size: 20px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.social-btn:hover {
+    transform: translateY(-2px) scale(1.05);
+    background: rgba(255, 255, 255, 0.25);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+.social-btn.github:hover {
+    background: rgba(33, 41, 60, 0.9);
+    border-color: #21293c;
+}
+
+.social-btn.linkedin:hover {
+    background: rgba(10, 102, 194, 0.9);
+    border-color: #0a66c2;
+}
+
+.social-btn svg {
+    width: 22px;
+    height: 22px;
+    fill: currentColor;
+}
+
 .emscripten {
     padding-right: 0;
     margin-left: auto;
@@ -298,6 +345,20 @@ input[type=button]:hover {
         font-size: 1.4em;
         margin-left: 8px;
         letter-spacing: 0.5px;
+    }
+    #social-buttons {
+        margin-right: 10px;
+        gap: 8px;
+    }
+    .social-btn {
+        width: 32px;
+        height: 32px;
+        font-size: 16px;
+        border-radius: 8px;
+    }
+    .social-btn svg {
+        width: 18px;
+        height: 18px;
     }
     .emscripten_border {
         padding: 12px 0 8px 0;
