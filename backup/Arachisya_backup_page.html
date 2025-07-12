@@ -1,0 +1,98 @@
+<!doctypehtml>
+    <html lang=en-us>
+
+    <head>
+        <meta charset=utf-8>
+        <meta content="text/html; charset=utf-8" http-equiv=Content-Type>
+        <title>Arachisya - 2D Action RPG</title>
+        <meta content="raylib HTML5 GAME" name=title>
+        <meta content="New HTML5 videogame, developed using raylib videogames library" name=description>
+        <meta content="raylib, games, html5, programming, C, C++, library, learn, videogames" name=keywords>
+        <meta content="width=device-width" name=viewport>
+        <meta content="raylib HTML5 GAME" property=og:title>
+        <meta content=image/png property=og:image:type>
+        <meta content=https://www.raylib.com/common/img/raylib_logo.png property=og:image>
+        <meta content=raylib.com property=og:site_name>
+        <meta content=https://www.raylib.com/games.html property=og:url>
+        <meta content="New HTML5 videogame, developed using raylib videogames library" property=og:description>
+        <meta content=summary name=twitter:card>
+        <meta content=@raysan5 name=twitter:site>
+        <meta content="raylib HTML5 GAME" name=twitter:title>
+        <meta content=https://www.raylib.com/common/raylib_logo.png name=twitter:image>
+        <meta content=https://www.raylib.com/games.html name=twitter:url>
+        <meta content="New HTML5 videogame, developed using raylib videogames library" name=twitter:description>
+        <link href=https://www.raylib.com/favicon.ico rel="shortcut icon">
+        <link rel="stylesheet" href="style.css">
+    </head>
+
+    <body>
+        <div id=header><a href=https://www.raylib.com id=logo></a>
+            <button id="btn-log" style="margin-left:16px; height:32px; border-radius:6px; border:none; background:#fff; color:#1976d2; font-weight:bold; cursor:pointer; font-size:1em;">Show Log</button>
+            <div class=spinner id=spinner></div>
+            <div class=emscripten id=status>Downloading...</div>
+            <div class=emscripten><progress hidden id=progress max=100 value=0></progress></div>
+        </div>
+        <div class=emscripten_border><canvas class=emscripten id=canvas oncontextmenu=event.preventDefault()
+                width="480" height="400" tabindex=-1></canvas></div>
+        <div id="mobile-controls">
+            <div class="mobile-controls-left">
+                <div class="mobile-controls-row">
+                    <button class="mobile-key" data-key="W" aria-label="Up">&#8593;</button>
+                </div>
+                <div class="mobile-controls-row">
+                    <button class="mobile-key" data-key="A" aria-label="Left">&#8592;</button>
+                    <button class="mobile-key" data-key="S" aria-label="Down">&#8595;</button>
+                    <button class="mobile-key" data-key="D" aria-label="Right">&#8594;</button>
+                </div>
+            </div>
+            <div class="mobile-controls-right">
+                <button class="mobile-key" data-key="SPACE">Space</button>
+                <button class="mobile-key" data-key="ENTER">Enter</button>
+            </div>
+        </div>
+        <textarea id=output rows=8 style="display:none;"></textarea>
+        <script src=https://cdn.jsdelivr.net/gh/eligrey/FileSaver.js/dist/FileSaver.min.js></script>
+        <script>function saveFileFromMEMFSToDisk(e, a) { var i, o = FS.readFile(e); i = new Blob([o.buffer], { type: "application/octet-binary" }), saveAs(i, a) }
+        document.getElementById('btn-log').onclick = function() {
+            var log = document.getElementById('output');
+            if (log.style.display === 'none') {
+                log.style.display = 'block';
+                this.textContent = 'Hide Log';
+            } else {
+                log.style.display = 'none';
+                this.textContent = 'Show Log';
+            }
+        };
+
+        // Mobile controls: send key events to Emscripten
+        document.querySelectorAll('.mobile-key').forEach(function(btn) {
+            btn.addEventListener('touchstart', function(e) {
+                var key = btn.getAttribute('data-key');
+                var code;
+                if (key === 'SPACE') code = 32;
+                else if (key === 'ENTER') code = 13;
+                else code = key.charCodeAt(0);
+                var evt = new KeyboardEvent('keydown', { key: key === 'SPACE' ? ' ' : (key === 'ENTER' ? 'Enter' : key), keyCode: code, which: code });
+                window.dispatchEvent(evt);
+                btn.classList.add('active');
+                e.preventDefault();
+            });
+            btn.addEventListener('touchend', function(e) {
+                var key = btn.getAttribute('data-key');
+                var code;
+                if (key === 'SPACE') code = 32;
+                else if (key === 'ENTER') code = 13;
+                else code = key.charCodeAt(0);
+                var evt = new KeyboardEvent('keyup', { key: key === 'SPACE' ? ' ' : (key === 'ENTER' ? 'Enter' : key), keyCode: code, which: code });
+                window.dispatchEvent(evt);
+                btn.classList.remove('active');
+                e.preventDefault();
+            });
+        });
+        </script>
+        <script>var statusElement = document.querySelector("#status"), progressElement = document.querySelector("#progress"), spinnerElement = document.querySelector("#spinner"), Module = { preRun: [], postRun: [], print: function () { var e = document.querySelector("#output"); return e && (e.value = ""), function (t) { arguments.length > 1 && (t = Array.prototype.slice.call(arguments).join(" ")), console.log(t), e && (e.value += t + "\n", e.scrollTop = e.scrollHeight) } }(), printErr: function (e) { arguments.length > 1 && (e = Array.prototype.slice.call(arguments).join(" ")), console.error(e) }, canvas: function () { var e = document.querySelector("#canvas"); return e.addEventListener("webglcontextlost", (function (e) { alert("WebGL context lost. You will need to reload the page."), e.preventDefault() }), !1), e }(), setStatus: function (e) { if (Module.setStatus.last || (Module.setStatus.last = { time: Date.now(), text: "" }), e !== Module.setStatus.last.text) { var t = e.match(/([^(]+)\((\d+(\.\d+)?)\/(\d+)\)/), n = Date.now(); t && n - Module.setStatus.last.time < 30 || (Module.setStatus.last.time = n, Module.setStatus.last.text = e, t ? (e = t[1], progressElement.value = 100 * parseInt(t[2]), progressElement.max = 100 * parseInt(t[4]), progressElement.hidden = !0, spinnerElement.hidden = !1) : (progressElement.value = null, progressElement.max = null, progressElement.hidden = !0, e || (spinnerElement.style.display = "none")), statusElement.innerHTML = e) } }, totalDependencies: 0, monitorRunDependencies: function (e) { this.totalDependencies = Math.max(this.totalDependencies, e), Module.setStatus(e ? "Preparing... (" + (this.totalDependencies - e) + "/" + this.totalDependencies + ")" : "All downloads complete.") } }; Module.setStatus("Downloading..."), window.onerror = function () { Module.setStatus("Exception thrown, see JavaScript console"), spinnerElement.style.display = "none", Module.setStatus = function (e) { e && Module.printErr("[post-exception status] " + e) } }</script>
+        <script>var audioBtn = document.querySelector("#btn-audio"); const audioContexList = []; function toggleAudio() { var t = !1; audioContexList.forEach((e => { "suspended" == e.state ? (e.resume(), t = !0) : "running" == e.state && e.suspend() })), audioBtn.value = t ? "🔇 SUSPEND" : "🔈 RESUME" } self.AudioContext = new Proxy(self.AudioContext, { construct(t, e) { const n = new t(...e); return audioContexList.push(n), "suspended" == n.state && (audioBtn.value = "🔈 RESUME"), n } })</script>
+        <script src=Arachisya.js async></script>
+    </body>
+
+    </html>

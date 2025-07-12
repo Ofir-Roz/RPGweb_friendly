@@ -2,7 +2,8 @@
 #include "raylib.h"
 #include "raymath.h"
 
-Character::Character(int winWidth, int winHeight):
+Character::Character(int winWidth, int winHeight, Texture2D idleTexture, Texture2D runTexture):
+    BaseCharacter(idleTexture, runTexture),
     windowWidth(winWidth),
     windowHeight(winHeight)
 {
@@ -91,11 +92,3 @@ void Character::tick(float deltaTime)
     DrawTexturePro(weapon, source, dest, origin, rotation, WHITE);
 }
 
-void Character::takeDamage(float damage)
-{
-    health -= damage;
-    if (health <= 0.f)
-    {
-        setAlive(false);
-    }
-}

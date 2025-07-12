@@ -1,4 +1,0 @@
-Cleanup performed on July 12, 2025:
-- Removed build/ (empty)
-- Removed IntellectDevourerIdleSide_spritesheet.piskel
-- Removed gif2.gif

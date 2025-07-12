@@ -7,12 +7,10 @@
 class Character : public BaseCharacter
 {
 public:
-    Character(int winWidth, int winHeight);
+    Character(int winWidth, int winHeight, Texture2D idleTexture, Texture2D runTexture);
     virtual void tick(float deltaTime) override;
     virtual Vector2 getScreenPos() override;
     Rectangle getWeaponCollisionRec() { return weaponCollisionRec; }
-    float getHealth() const { return health; }
-    void takeDamage(float damage);
 private:
     int windowWidth{};
     int windowHeight{};
@@ -20,7 +18,6 @@ private:
     Rectangle weaponCollisionRec{};
     Sound stride = LoadSound("nature_tileset/16_human_walk_stone_3.wav");
     Sound attack = LoadSound("nature_tileset/07_human_atk_sword_2.wav");
-    float health {100.f};
 };
 
 #endif
