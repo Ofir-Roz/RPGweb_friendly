@@ -3,7 +3,7 @@
     position: relative;
     width: 120px;
     height: 120px;
-    margin: 10px;
+    margin: 10px 10px 10px 25px; /* Move joystick right by increasing left margin */
 }
 
 .joystick-base {
@@ -101,7 +101,7 @@
     margin-top: 10px;
     margin-bottom: 10px;
     width: 100%;
-    padding: 0 20px;
+    padding: 0 15px 0 35px; /* Move content right by increasing left padding */
     box-sizing: border-box;
 }
 
@@ -122,6 +122,7 @@
     .joystick-container {
         width: 100px;
         height: 100px;
+        margin: 10px 10px 10px 20px; /* Maintain right positioning on smaller screens */
     }
     
     .joystick-base {
@@ -135,7 +136,7 @@
     }
     
     .mobile-controls-with-joystick {
-        padding: 0 15px;
+        padding: 0 10px 0 25px; /* Adjust padding for smaller screens */
     }
 }
 
@@ -143,6 +144,7 @@
     .joystick-container {
         width: 85px;
         height: 85px;
+        margin: 10px 10px 10px 15px; /* Adjust for very small screens */
     }
     
     .joystick-base {
@@ -153,5 +155,9 @@
     .joystick-knob {
         width: 36px;
         height: 36px;
+    }
+    
+    .mobile-controls-with-joystick {
+        padding: 0 8px 0 20px;
     }
 }

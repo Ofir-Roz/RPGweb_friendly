@@ -72,6 +72,14 @@
                 <button class="mobile-key" data-key="ENTER">Enter</button>
             </div>
         </div>
+        <div id="game-navigation">
+            <a href="index.html" class="nav-btn start-over-btn">
+                <svg viewBox="0 0 24 24" class="btn-icon">
+                    <path d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4M7,12L12,7L17,12H14V16H10V12H7Z"/>
+                </svg>
+                <span class="btn-text">Start Over</span>
+            </a>
+        </div>
         <textarea id=output rows=8 style="display:none;"></textarea>
         <script src=https://cdn.jsdelivr.net/gh/eligrey/FileSaver.js/dist/FileSaver.min.js></script>
         <script>function saveFileFromMEMFSToDisk(e, a) { var i, o = FS.readFile(e); i = new Blob([o.buffer], { type: "application/octet-binary" }), saveAs(i, a) }

@@ -309,6 +309,12 @@ input[type=button]:hover {
     cursor: pointer;
     outline: none;
 }
+
+/* Make space button wider by default */
+.mobile-key[data-key="SPACE"] {
+    width: 85px;
+}
+
 .mobile-key.active, .mobile-key:active {
     background: linear-gradient(90deg, #1976d2 0%, #4fc3f7 100%);
     color: #fff;
@@ -360,7 +366,7 @@ input[type=button]:hover {
         margin: 0 4px 0 4px;
     }
     .mobile-key[data-key="SPACE"] {
-        width: 60px;
+        width: 80px; /* Made wider from 60px */
     }
     .mobile-key[data-key="ENTER"] {
         width: 60px;
@@ -483,4 +489,87 @@ input[type=button]:hover {
 
 #header-controls .emscripten {
     margin: 0;
+}
+
+/* Game Navigation Section */
+#game-navigation {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    margin-top: 15px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+.nav-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    text-decoration: none;
+    border-radius: 25px;
+    font-weight: 600;
+    font-size: 1em;
+    transition: all 0.3s ease;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+}
+
+.nav-btn:hover {
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+    background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+    border-color: rgba(255, 255, 255, 0.4);
+}
+
+.nav-btn:active {
+    transform: translateY(0) scale(1.02);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.nav-btn .btn-icon {
+    width: 20px;
+    height: 20px;
+    fill: currentColor;
+    flex-shrink: 0;
+}
+
+.nav-btn .btn-text {
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.start-over-btn {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+}
+
+.start-over-btn:hover {
+    background: linear-gradient(135deg, #f5576c 0%, #f093fb 100%);
+}
+
+/* Mobile responsive adjustments for game navigation */
+@media (max-width: 600px) {
+    #game-navigation {
+        margin: 15px 10px;
+        padding: 15px;
+    }
+    
+    .nav-btn {
+        padding: 10px 20px;
+        font-size: 0.95em;
+    }
+    
+    .nav-btn .btn-icon {
+        width: 18px;
+        height: 18px;
+    }
 }
