@@ -12,6 +12,7 @@ class VirtualJoystick {
         this.currentDirection = null;
         this.deadZone = 0.2; // 20% dead zone
         this.maxDistance = 35; // Maximum distance from center
+        this.touchId = null; // Track specific touch for this joystick
         
         this.center = { x: 60, y: 60 }; // Center of 120px joystick
         this.currentPos = { x: this.center.x, y: this.center.y };
@@ -45,15 +46,24 @@ class VirtualJoystick {
         document.addEventListener('mousemove', this.onMove.bind(this));
         document.addEventListener('mouseup', this.onEnd.bind(this));
         
-        // Touch events
-        this.knob.addEventListener('touchstart', this.onStart.bind(this), { passive: false });
+        // Touch events - only listen on the joystick container to avoid conflicts
+        this.base.addEventListener('touchstart', this.onStart.bind(this), { passive: false });
         document.addEventListener('touchmove', this.onMove.bind(this), { passive: false });
         document.addEventListener('touchend', this.onEnd.bind(this));
         document.addEventListener('touchcancel', this.onEnd.bind(this));
     }
     
     onStart(event) {
+        // For touch events, only handle if no other touch is being tracked
+        if (event.type.includes('touch')) {
+            if (this.touchId !== null) return; // Already tracking a touch
+            const touch = event.touches[0];
+            if (!touch) return;
+            this.touchId = touch.identifier;
+        }
+        
         event.preventDefault();
+        event.stopPropagation(); // Prevent event from bubbling to other controls
         this.isDragging = true;
         this.knob.classList.add('dragging');
         
@@ -66,6 +76,12 @@ class VirtualJoystick {
     onMove(event) {
         if (!this.isDragging) return;
         
+        // For touch events, only handle the specific touch we're tracking
+        if (event.type.includes('touch')) {
+            const touch = Array.from(event.touches).find(t => t.identifier === this.touchId);
+            if (!touch) return;
+        }
+        
         event.preventDefault();
         
         const rect = this.base.getBoundingClientRect();
@@ -74,7 +90,8 @@ class VirtualJoystick {
         
         let clientX, clientY;
         if (event.type.includes('touch')) {
-            const touch = event.touches[0] || event.changedTouches[0];
+            const touch = Array.from(event.touches).find(t => t.identifier === this.touchId);
+            if (!touch) return;
             clientX = touch.clientX;
             clientY = touch.clientY;
         } else {
@@ -106,6 +123,13 @@ class VirtualJoystick {
     }
     
     onEnd(event) {
+        // For touch events, only handle if it's our tracked touch
+        if (event.type.includes('touch')) {
+            const touch = Array.from(event.changedTouches || []).find(t => t.identifier === this.touchId);
+            if (!touch && this.touchId !== null) return;
+            this.touchId = null; // Clear the touch tracking
+        }
+        
         if (!this.isDragging) return;
         
         this.isDragging = false;
@@ -121,8 +145,11 @@ class VirtualJoystick {
     
     updateKnobPosition(x, y) {
         this.currentPos = { x, y };
-        this.knob.style.left = (x - 25) + 'px'; // 25 = half of knob width
-        this.knob.style.top = (y - 25) + 'px';  // 25 = half of knob height
+        // Convert from center-based coordinates to transform translate
+        // Center is at (60, 60) for a 120px joystick
+        const offsetX = x - this.center.x;
+        const offsetY = y - this.center.y;
+        this.knob.style.transform = `translate(calc(-50% + ${offsetX}px), calc(-50% + ${offsetY}px))`;
     }
     
     updateDirection(deltaX, deltaY) {
@@ -134,39 +161,52 @@ class VirtualJoystick {
         
         // Check if we're outside the dead zone
         if (normalizedDistance > this.deadZone) {
-            const angle = Math.atan2(deltaY, deltaX) * (180 / Math.PI);
-            const newDirection = this.angleToDirection(angle);
+            // Calculate 8-directional movement based on normalized deltas
+            const directions = this.calculateDirections(deltaX, deltaY);
             
-            if (newDirection !== this.currentDirection) {
-                this.currentDirection = newDirection;
+            if (directions.length > 0) {
+                this.currentDirection = directions.join('+');
+                // Send appropriate key events for all active directions
+                this.sendDirectionKeys(directions);
             }
-            
-            // Send appropriate key events
-            this.sendDirectionKeys(newDirection);
         } else {
             this.currentDirection = null;
         }
     }
     
-    angleToDirection(angle) {
-        // Normalize angle to 0-360
-        const normalizedAngle = ((angle + 360) % 360);
+    calculateDirections(deltaX, deltaY) {
+        const directions = [];
+        const threshold = 0.3; // Sensitivity for diagonal movement (30% of max displacement)
         
-        // Define direction ranges (45-degree sectors)
-        if (normalizedAngle >= 315 || normalizedAngle < 45) {
-            return 'right'; // D key
-        } else if (normalizedAngle >= 45 && normalizedAngle < 135) {
-            return 'down'; // S key
-        } else if (normalizedAngle >= 135 && normalizedAngle < 225) {
-            return 'left'; // A key
-        } else if (normalizedAngle >= 225 && normalizedAngle < 315) {
-            return 'up'; // W key
+        // Normalize the deltas to get direction strength
+        const maxDistance = this.maxDistance;
+        const normalizedX = deltaX / maxDistance;
+        const normalizedY = deltaY / maxDistance;
+        
+        // Check vertical directions (Y-axis)
+        // Negative Y is up (screen coordinates), positive Y is down
+        if (normalizedY < -threshold) {
+            directions.push('up'); // W key
+        } else if (normalizedY > threshold) {
+            directions.push('down'); // S key
         }
         
-        return null;
+        // Check horizontal directions (X-axis)
+        // Negative X is left, positive X is right
+        if (normalizedX < -threshold) {
+            directions.push('left'); // A key
+        } else if (normalizedX > threshold) {
+            directions.push('right'); // D key
+        }
+        
+        // This creates 8-directional movement:
+        // Pure directions: up, down, left, right
+        // Diagonal directions: up+left (W+A), up+right (W+D), down+left (S+A), down+right (S+D)
+        
+        return directions;
     }
     
-    sendDirectionKeys(direction) {
+    sendDirectionKeys(directions) {
         const keyMap = {
             'up': 'W',
             'down': 'S',
@@ -174,10 +214,13 @@ class VirtualJoystick {
             'right': 'D'
         };
         
-        if (direction && keyMap[direction]) {
-            this.sendKeyEvent('keydown', keyMap[direction]);
-            this.activeKeys.add(keyMap[direction]);
-        }
+        // Send keydown events for all active directions
+        directions.forEach(direction => {
+            if (keyMap[direction]) {
+                this.sendKeyEvent('keydown', keyMap[direction]);
+                this.activeKeys.add(keyMap[direction]);
+            }
+        });
     }
     
     releaseAllKeys() {
@@ -274,6 +317,9 @@ function removeJoystick() {
 function addActionButtonListeners() {
     document.querySelectorAll('.mobile-key').forEach(function(btn) {
         btn.addEventListener('touchstart', function(e) {
+            // Stop propagation to prevent interference with joystick
+            e.stopPropagation();
+            
             const key = btn.getAttribute('data-key');
             let code;
             if (key === 'SPACE') code = 32;
@@ -288,9 +334,12 @@ function addActionButtonListeners() {
             window.dispatchEvent(evt);
             btn.classList.add('active');
             e.preventDefault();
-        });
+        }, { passive: false });
         
         btn.addEventListener('touchend', function(e) {
+            // Stop propagation to prevent interference with joystick
+            e.stopPropagation();
+            
             const key = btn.getAttribute('data-key');
             let code;
             if (key === 'SPACE') code = 32;
@@ -305,7 +354,26 @@ function addActionButtonListeners() {
             window.dispatchEvent(evt);
             btn.classList.remove('active');
             e.preventDefault();
-        });
+        }, { passive: false });
+        
+        // Also handle touchcancel to ensure button state is cleared
+        btn.addEventListener('touchcancel', function(e) {
+            e.stopPropagation();
+            btn.classList.remove('active');
+            
+            const key = btn.getAttribute('data-key');
+            let code;
+            if (key === 'SPACE') code = 32;
+            else if (key === 'ENTER') code = 13;
+            else code = key.charCodeAt(0);
+            
+            const evt = new KeyboardEvent('keyup', { 
+                key: key === 'SPACE' ? ' ' : (key === 'ENTER' ? 'Enter' : key), 
+                keyCode: code, 
+                which: code 
+            });
+            window.dispatchEvent(evt);
+        }, { passive: false });
     });
 }
 

@@ -22,6 +22,23 @@
     justify-content: center;
 }
 
+/* 8-directional indicators */
+.joystick-base::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: 
+        /* Main directional lines */
+        linear-gradient(0deg, transparent 48%, rgba(255, 255, 255, 0.1) 50%, transparent 52%),
+        linear-gradient(90deg, transparent 48%, rgba(255, 255, 255, 0.1) 50%, transparent 52%),
+        /* Diagonal lines */
+        linear-gradient(45deg, transparent 48%, rgba(255, 255, 255, 0.05) 50%, transparent 52%),
+        linear-gradient(-45deg, transparent 48%, rgba(255, 255, 255, 0.05) 50%, transparent 52%);
+    pointer-events: none;
+}
+
 .joystick-knob {
     position: absolute;
     width: 50px;
@@ -36,13 +53,17 @@
     transition: all 0.1s ease;
     touch-action: none;
     user-select: none;
+    /* Center the knob initially */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
 .joystick-knob:active {
-    transform: scale(0.95);
     box-shadow: 
         0 2px 8px rgba(25, 118, 210, 0.6),
         0 1px 4px rgba(0, 0, 0, 0.3);
+    /* Remove scale transform since we're using transform for positioning */
 }
 
 .joystick-knob.dragging {
