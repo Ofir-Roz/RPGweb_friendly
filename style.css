@@ -21,6 +21,8 @@ body {
     position: relative;
     z-index: 1000;
     padding: 4px 0;
+    min-width: 0;
+    overflow: hidden;
 }
 
 #logo {
@@ -71,6 +73,8 @@ body {
     flex-wrap: nowrap;
     overflow: hidden;
     max-width: 60%;
+    flex-shrink: 0;
+    min-width: 0;
 }
 
 .modern-btn {
@@ -409,68 +413,82 @@ input[type=button]:hover {
     #header {
         height: 50px;
         font-size: 0.95em;
-        padding: 0 8px;
+        padding: 0 4px;
+        width: 100vw;
+        box-sizing: border-box;
+        overflow: hidden;
     }
     
     #logo {
-        width: 40px;
-        height: 40px;
-        margin: 8px;
+        width: 32px;
+        height: 32px;
+        margin: 4px;
+        flex-shrink: 0;
     }
     
     #header-title {
-        font-size: 1.4em;
-        margin-left: 8px;
+        font-size: 1.1em;
+        margin-left: 4px;
         letter-spacing: 0.5px;
+        flex-shrink: 1;
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
     }
     
     #header-controls {
-        margin-right: 8px;
-        gap: 8px;
-        max-width: 70%;
+        margin-right: 4px;
+        gap: 4px;
+        max-width: 40%;
+        min-width: 0;
+        flex-shrink: 0;
         
         .spinner {
-            height: 20px;
-            width: 20px;
+            height: 16px;
+            width: 16px;
         }
         
         #status {
-            font-size: 0.75em;
-            max-width: 80px;
+            font-size: 0.7em;
+            max-width: 60px;
         }
     }
     
     #social-buttons {
-        gap: 3px;
-        margin-left: -20px;
+        gap: 2px;
+        margin-left: 2px;
+        flex-shrink: 0;
     }
     
     .social-btn {
-        width: 28px;
-        height: 28px;
-        font-size: 14px;
-        border-radius: 6px;
+        width: 24px;
+        height: 24px;
+        font-size: 12px;
+        border-radius: 4px;
+        margin: 2px;
         
         svg {
-            width: 16px;
-            height: 16px;
+            width: 12px;
+            height: 12px;
         }
     }
     
     .modern-btn {
-        padding: 4px 8px;
-        font-size: 0.75em;
-        border-radius: 6px;
-        gap: 4px;
+        padding: 2px 4px;
+        font-size: 0.65em;
+        border-radius: 4px;
+        gap: 2px;
+        min-width: 0;
+        
+        .btn-text {
+            display: none; /* Hide text in mobile to save space */
+        }
     }
     
     .btn-icon {
-        width: 14px;
-        height: 14px;
-    }
-    
-    .btn-text {
-        font-size: 0.75em;
+        width: 12px;
+        height: 12px;
     }
 
     /* Game Container Mobile Styles */
