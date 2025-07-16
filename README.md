@@ -32,16 +32,18 @@ Arachisya is a 2D Action RPG that combines classic gameplay mechanics with moder
 - **Enter** - Interact/Confirm
 
 ### Mobile
-- **Touch Controls** - On-screen directional pad and action buttons
-- **Responsive Layout** - Optimized for various screen sizes
+- **Virtual Joystick** - On-screen directional control with smooth movement
+- **Touch Actions** - Tap-based attack and interaction buttons
+- **Responsive Canvas** - Auto-scaling game area for different screen sizes
 
 ## 🛠️ Technology Stack
 
-- **Language**: C++
+- **Language**: C++14
 - **Game Framework**: [Raylib](https://www.raylib.com/)
 - **Web Technology**: WebAssembly (Emscripten)
 - **Frontend**: HTML5, CSS3, JavaScript
-- **Build System**: Makefile
+- **Build System**: Makefile + Automated batch script
+- **Touch Controls**: Custom virtual joystick implementation
 - **Deployment**: GitHub Pages
 
 ## 🎯 Game Features
@@ -80,13 +82,22 @@ Arachisya is a 2D Action RPG that combines classic gameplay mechanics with moder
 
 3. **Build for Web**
    ```bash
-   # Run the web build script
-   ./build_web.bat
+   # Run the automated web build script (Windows)
+   .\build_web.bat
+   
+   # Or use make directly
+   make PLATFORM=PLATFORM_WEB -B
    ```
 
 4. **Run locally**
-   - For desktop: Run the generated executable
-   - For web: Serve the files with a local web server
+   ```bash
+   # For desktop: Run the generated executable
+   ./Arachisya
+   
+   # For web: Start local server and open browser
+   python -m http.server 8080
+   # Then visit: http://localhost:8080/Arachisya.html
+   ```
 
 ### Project Structure
 ```
@@ -96,13 +107,21 @@ RPGweb_friendly/
 │   ├── Character.cpp/h    # Character system
 │   ├── Enemy.cpp/h        # Enemy entities
 │   ├── Prop.cpp/h         # Game props/objects
-│   └── ...
+│   ├── BaseCharacter.cpp/h # Base character functionality
+│   └── DynamicScreen.cpp/h # Screen management
 ├── characters/            # Character sprites and assets
 ├── nature_tileset/        # Environment and audio assets
-├── web/                   # Web build output (legacy)
-├── Arachisya.html        # Main game page
+├── joystick/              # Touch control components
+│   ├── joystick.css      # Virtual joystick styling
+│   └── joystick.js       # Touch control logic
+├── backup/                # Build system backups
+│   └── Arachisya.html    # Enhanced HTML backup
+├── Arachisya.html        # Main game page (enhanced)
+├── Arachisya.js          # Compiled game logic
+├── Arachisya.wasm        # WebAssembly binary
+├── Arachisya.data        # Game assets package
 ├── style.css             # Modern UI styling
-├── index.html            # Landing page
+├── build_web.bat         # Automated build script
 ├── Makefile              # Build configuration
 └── README.md             # This file
 ```
@@ -124,12 +143,19 @@ RPGweb_friendly/
 ## 📱 Mobile Support
 
 The game includes comprehensive mobile support:
-- Touch-based movement controls
-- Responsive canvas sizing
-- Optimized button layouts
-- Mobile-first design considerations
+- **Virtual Joystick System** - Smooth touch-based movement controls
+- **Modular Components** - Separated joystick files in `/joystick/` directory
+- **Responsive Canvas** - Automatic sizing for different devices
+- **Touch Optimization** - Mobile-first control design
+- **Performance Tuning** - WebAssembly optimization for mobile browsers
 
 ## 🔧 Development
+
+### Build System
+- **Automated Build**: `build_web.bat` handles complete WebAssembly compilation
+- **Backup System**: Automatically preserves enhanced HTML customizations
+- **Asset Packaging**: Emscripten preloads game assets into `.data` file
+- **Path Management**: Clean directory structure with organized components
 
 ### Key Components
 
@@ -141,9 +167,24 @@ The game includes comprehensive mobile support:
 
 ### Asset Management
 - Sprite sheets for character animations
-- Tileset system for environments
+- Tileset system for environments  
 - Audio asset integration
 - Resource loading optimization
+- Automatic asset packaging via Emscripten
+
+## ✨ Enhanced Features
+
+### Modern Web Interface
+- **Glassmorphic Design** - Modern semi-transparent UI elements
+- **Gradient Backgrounds** - Beautiful multi-color gradient effects
+- **Social Integration** - Direct links to developer GitHub and LinkedIn
+- **Loading Animation** - Smooth spinner with real-time status updates
+
+### Build Automation
+- **One-Click Building** - Automated `build_web.bat` script
+- **Backup Preservation** - Maintains custom HTML enhancements across rebuilds
+- **Clean Structure** - Organized file hierarchy with separated concerns
+- **Development Workflow** - Streamlined build-to-test cycle
 
 ## 🚀 Deployment
 
@@ -174,12 +215,16 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## 🔮 Future Plans
 
-- [ ] Additional character classes
+- [ ] Additional character classes and abilities
+- [ ] Expanded virtual joystick functionality
+- [ ] Enhanced mobile touch gestures
+- [ ] Progressive Web App (PWA) features
 - [ ] Multiplayer support
-- [ ] Level editor
-- [ ] Achievement system
+- [ ] Level editor with visual tools
+- [ ] Achievement system with local storage
 - [ ] Save/load functionality
-- [ ] More environments and levels
+- [ ] More environments and procedural levels
+- [ ] Advanced audio system with spatial sound
 
 ---
 
