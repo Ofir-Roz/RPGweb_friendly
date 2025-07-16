@@ -4,6 +4,8 @@ body {
     padding: 0;
     background: linear-gradient(135deg, #b3e0ff 0%, #e6f7ff 100%);
     min-height: 100vh;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 #header {
@@ -338,14 +340,26 @@ input[type=button]:hover {
 
 /* Mobile Responsive Styles */
 @media (max-width: 600px) {
+    /* Ensure full viewport usage */
+    html, body {
+        height: 100vh;
+        width: 100vw;
+        overflow-x: hidden;
+        margin: 0;
+        padding: 0;
+    }
+    
     /* Mobile Controls */
     #mobile-controls {
         display: flex;
         flex-direction: row;
         justify-content: center;
         align-items: flex-end;
-        margin: 4px 0;
+        margin: 0;
+        padding: 0;
         width: 100%;
+        box-sizing: border-box;
+        position: relative;
     }
     
     .mobile-controls-left {
@@ -461,20 +475,27 @@ input[type=button]:hover {
 
     /* Game Container Mobile Styles */
     .emscripten_border {
-        padding: 8px 0 6px 0;
-        margin: 12px auto 0 auto;
-        max-width: 92vw;
+        padding: 0;
+        margin: 0 auto;
+        width: 100%;
+        max-width: 100%;
         border-radius: 12px;
+        box-sizing: border-box;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
     
     canvas.emscripten {
-        width: 85vw !important;
-        max-width: 85vw;
-        height: 75vw !important;
-        max-height: 85vw;
+        width: 96vw !important;
+        max-width: 96vw;
+        height: 84vw !important;
+        max-height: 92vw;
         min-width: 220px;
         min-height: 220px;
         border-radius: 8px;
+        margin: 0;
+        display: block;
     }
 
     /* Other Mobile Elements */
@@ -496,16 +517,22 @@ input[type=button]:hover {
         left: auto !important;
         top: auto !important;
         transform: none !important;
-        margin: 15px auto 0 auto;
-        padding: 12px;
-        max-width: 180px;
+        margin: 0 auto;
+        padding: 6px;
+        max-width: 95vw;
+        width: fit-content;
     }
     
     .game-container {
         position: static !important;
-        display: block !important;
+        display: flex !important;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
         margin: 0;
+        width: 100%;
         max-width: none;
+        padding: 0;
     }
     
     .nav-btn {
