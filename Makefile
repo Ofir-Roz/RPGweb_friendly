@@ -368,7 +368,7 @@ rwildcard=$(foreach d,$(wildcard $1*),$(call rwildcard,$d/,$2) $(filter $(subst 
 # Define all source files required
 SRC_DIR = src
 OBJ_DIR = build
-WEB_DIR = web
+WEB_DIR = .
 
 # Define all C++ source files for Arachisya
 CPP_SOURCES = $(SRC_DIR)/main.cpp $(SRC_DIR)/Character.cpp $(SRC_DIR)/BaseCharacter.cpp $(SRC_DIR)/Enemy.cpp $(SRC_DIR)/Prop.cpp $(SRC_DIR)/DynamicScreen.cpp
