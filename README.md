@@ -103,27 +103,36 @@ Arachisya is a 2D Action RPG that combines classic gameplay mechanics with moder
 ```
 RPGweb_friendly/
 ├── src/                    # C++ source code
-│   ├── main.cpp           # Main game entry point
-│   ├── Character.cpp/h    # Character system
-│   ├── Enemy.cpp/h        # Enemy entities
-│   ├── Prop.cpp/h         # Game props/objects
-│   ├── BaseCharacter.cpp/h # Base character functionality
+│   ├── main.cpp            # Game entry point
+│   ├── Character.cpp/h     # Player character
+│   ├── Enemy.cpp/h         # Enemy entities
+│   ├── Prop.cpp/h          # Game props/objects
+│   ├── BaseCharacter.cpp/h # Base character class
 │   └── DynamicScreen.cpp/h # Screen management
-├── characters/            # Character sprites and assets
-├── nature_tileset/        # Environment and audio assets
-├── joystick/              # Touch control components
-│   ├── joystick.css      # Virtual joystick styling
-│   └── joystick.js       # Touch control logic
-├── backup/                # Build system backups
-│   └── Arachisya.html    # Enhanced HTML backup
-├── Arachisya.html        # Main game page (enhanced)
-├── Arachisya.js          # Compiled game logic
-├── Arachisya.wasm        # WebAssembly binary
-├── Arachisya.data        # Game assets package
-├── style.css             # Modern UI styling
-├── build_web.bat         # Automated build script
-├── Makefile              # Build configuration
-└── README.md             # This file
+│
+├── css/                    # Stylesheets
+│   ├── style.css           # Main UI styles
+│   └── joystick.css        # Virtual joystick styles
+│
+├── js/                     # JavaScript modules
+│   ├── game-config.js      # Emscripten configuration
+│   ├── ui-controls.js      # UI event handlers
+│   └── joystick.js         # Virtual joystick logic
+│
+├── characters/             # Character sprite assets
+├── nature_tileset/         # Environment & audio assets
+├── backup/                 # Build system backups
+│
+├── index.html              # Landing page
+├── Arachisya.html          # Main game page
+├── Arachisya.js            # Compiled game (generated)
+├── Arachisya.wasm          # WebAssembly binary (generated)
+├── Arachisya.data          # Packed assets (generated)
+│
+├── Makefile                # Build configuration
+├── build_web.bat           # Windows build script
+├── .gitignore              # Git ignore rules
+└── README.md               # This file
 ```
 
 ## 🎨 UI/UX Features
@@ -144,7 +153,7 @@ RPGweb_friendly/
 
 The game includes comprehensive mobile support:
 - **Virtual Joystick System** - Smooth touch-based movement controls
-- **Modular Components** - Separated joystick files in `/joystick/` directory
+- **Modular Components** - JavaScript and CSS in `/js/` and `/css/` directories
 - **Responsive Canvas** - Automatic sizing for different devices
 - **Touch Optimization** - Mobile-first control design
 - **Performance Tuning** - WebAssembly optimization for mobile browsers
