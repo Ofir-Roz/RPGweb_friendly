@@ -1,0 +1,21 @@
+# Build outputs (desktop only)
+build/
+*.o
+*.exe
+
+# IDE/Editor files
+.vscode/
+*.code-workspace
+
+# System files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# Backup files (optional - keep for build_web.bat restore functionality)
+# backup/
+
+# Note: Web build artifacts are COMMITTED for GitHub Pages deployment
+# Arachisya.wasm, Arachisya.js, Arachisya.data are intentionally tracked
