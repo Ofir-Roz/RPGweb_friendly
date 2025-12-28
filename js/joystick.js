@@ -1,36 +1,40 @@
 /**
  * Virtual Joystick for Mobile Devices
- * Converts touch input to keyboard events (W, A, S, D)
+ * Purpose: translate touch/mouse drags into keyboard events (W/A/S/D)
+ * Why: lets the C++ game keep its keyboard-only input while supporting mobile
  */
 
 class VirtualJoystick {
     constructor(container) {
+        // DOM refs and runtime state
         this.container = container;
         this.knob = null;
         this.base = null;
         this.isDragging = false;
         this.currentDirection = null;
-        this.deadZone = 0.2;
-        this.maxDistance = 35;
+        this.deadZone = 0.2;       // ignore tiny movements to prevent jitter
+        this.maxDistance = 35;      // clamp knob radius to keep consistent input
         this.touchId = null;
         this.center = { x: 60, y: 60 };
         this.currentPos = { x: this.center.x, y: this.center.y };
-        this.activeKeys = new Set();
+        this.activeKeys = new Set(); // currently "pressed" keys so we can release them cleanly
         this.init();
     }
     
     init() {
+        // Build minimal DOM structure: base circle + movable knob
         this.base = document.createElement('div');
         this.base.className = 'joystick-base';
         this.knob = document.createElement('div');
         this.knob.className = 'joystick-knob';
         this.base.appendChild(this.knob);
         this.container.appendChild(this.base);
-        this.addEventListeners();
+        this.addEventListeners();   // attach mouse + touch handlers
         this.updateKnobPosition(this.center.x, this.center.y);
     }
     
     addEventListeners() {
+        // Desktop: mouse drag; Mobile: touch gestures
         this.knob.addEventListener('mousedown', this.onStart.bind(this));
         document.addEventListener('mousemove', this.onMove.bind(this));
         document.addEventListener('mouseup', this.onEnd.bind(this));
@@ -41,6 +45,7 @@ class VirtualJoystick {
     }
     
     onStart(event) {
+        // Start tracking a mouse/touch drag; lock to a single touch id
         if (event.type.includes('touch')) {
             if (this.touchId !== null) return;
             const touch = event.touches[0];
@@ -57,6 +62,7 @@ class VirtualJoystick {
     }
     
     onMove(event) {
+        // Convert screen movement to local deltas relative to the base center
         if (!this.isDragging) return;
         if (event.type.includes('touch')) {
             const touch = Array.from(event.touches).find(t => t.identifier === this.touchId);
@@ -93,6 +99,7 @@ class VirtualJoystick {
     }
     
     onEnd(event) {
+        // End drag: snap knob to center and release any pressed keys
         if (event.type.includes('touch')) {
             const touch = Array.from(event.changedTouches || []).find(t => t.identifier === this.touchId);
             if (!touch && this.touchId !== null) return;
@@ -107,6 +114,7 @@ class VirtualJoystick {
     }
     
     updateKnobPosition(x, y) {
+        // Move the knob visually using CSS transform
         this.currentPos = { x, y };
         const offsetX = x - this.center.x;
         const offsetY = y - this.center.y;
@@ -114,6 +122,7 @@ class VirtualJoystick {
     }
     
     updateDirection(deltaX, deltaY) {
+        // Decide which directions are active and emit keydown events
         const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
         const normalizedDistance = distance / this.maxDistance;
         this.releaseAllKeys();
@@ -129,6 +138,7 @@ class VirtualJoystick {
     }
     
     calculateDirections(deltaX, deltaY) {
+        // Map vector to cardinal directions with a small threshold
         const directions = [];
         const threshold = 0.3;
         const normalizedX = deltaX / this.maxDistance;
@@ -141,6 +151,7 @@ class VirtualJoystick {
     }
     
     sendDirectionKeys(directions) {
+        // Emit synthetic keyboard events (W/A/S/D) so the C++ input works untouched
         const keyMap = { 'up': 'W', 'down': 'S', 'left': 'A', 'right': 'D' };
         directions.forEach(direction => {
             if (keyMap[direction]) {
@@ -151,6 +162,7 @@ class VirtualJoystick {
     }
     
     releaseAllKeys() {
+        // Balance key presses with matching keyup events
         this.activeKeys.forEach(key => {
             this.sendKeyEvent('keyup', key);
         });
@@ -158,6 +170,7 @@ class VirtualJoystick {
     }
     
     sendKeyEvent(type, key) {
+        // Minimal KeyboardEvent for Emscripten/GLFW-style key handling in the page
         const code = key.charCodeAt(0);
         const event = new KeyboardEvent(type, {
             key: key,
@@ -170,6 +183,7 @@ class VirtualJoystick {
     }
     
     destroy() {
+        // Tear down joystick DOM and ensure no keys stay "stuck"
         this.releaseAllKeys();
         if (this.container && this.base) {
             this.container.removeChild(this.base);
@@ -180,6 +194,7 @@ class VirtualJoystick {
 // =====================================================================
 
 document.addEventListener('DOMContentLoaded', function() {
+    // Auto-enable joystick on small screens; toggle on resize
     if (window.innerWidth <= 600) {
         initializeJoystick();
     }
@@ -196,6 +211,7 @@ document.addEventListener('DOMContentLoaded', function() {
 let joystickInstance = null;
 
 function initializeJoystick() {
+    // Replace default mobile controls with joystick layout and hook events
     const mobileControls = document.getElementById('mobile-controls');
     if (!mobileControls) return;
     mobileControls.classList.add('joystick-active');
@@ -216,6 +232,7 @@ function initializeJoystick() {
 }
 
 function removeJoystick() {
+    // Restore default controls when leaving mobile layout
     if (joystickInstance) {
         joystickInstance.destroy();
         joystickInstance = null;
@@ -228,6 +245,7 @@ function removeJoystick() {
 }
 
 function addActionButtonListeners() {
+    // Space/Enter buttons: synthesize keydown/keyup on touch
     document.querySelectorAll('.mobile-key').forEach(btn => {
         btn.addEventListener('touchstart', e => {
             e.stopPropagation();
@@ -264,6 +282,7 @@ function addActionButtonListeners() {
 }
 
 function restoreOriginalMobileControls() {
+    // Put back the directional buttons layout when joystick is disabled
     const mobileControls = document.getElementById('mobile-controls');
     if (!mobileControls) return;
     mobileControls.innerHTML = `
