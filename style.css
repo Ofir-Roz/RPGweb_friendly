@@ -541,18 +541,6 @@ input[type=button]:hover {
         width: fit-content;
     }
     
-    .game-container {
-        position: static !important;
-        display: flex !important;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        margin: 0;
-        width: 100%;
-        max-width: none;
-        padding: 0;
-    }
-    
     .nav-btn {
         padding: 8px 16px;
         font-size: 0.9em;
@@ -604,16 +592,6 @@ input[type=button]:hover {
     border-radius: 15px;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
     border: 1px solid rgba(255, 255, 255, 0.15);
-}
-
-/* Container to position navigation relative to canvas */
-.game-container {
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 20px auto 0 auto;
-    max-width: 1200px;
 }
 
 .nav-btn {

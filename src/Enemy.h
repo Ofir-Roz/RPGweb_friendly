@@ -21,7 +21,6 @@ private:
     float radius{25.f};
     bool killed{false};
     EnemyType enemyType{GOBLIN};
-    float maxHealth{100.f};
     
     void setupEnemyStats();
 };
